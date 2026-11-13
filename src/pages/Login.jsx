@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase, supabaseConfigError } from '../lib/supabase'
+import { useAuth } from '../lib/auth.jsx'
 import Logo from '../components/Logo.jsx'
 
 export default function Login() {
+  const { enterDemo } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [mode, setMode] = useState('login')
@@ -11,10 +13,14 @@ export default function Login() {
   const [busy, setBusy] = useState(false)
   const nav = useNavigate()
 
+  const startDemo = () => {
+    enterDemo()
+    nav('/dashboard')
+  }
+
   const submit = async (e) => {
     e.preventDefault()
     if (supabaseConfigError) return setMsg(supabaseConfigError)
-
     setBusy(true)
     setMsg('')
     try {
@@ -43,6 +49,9 @@ export default function Login() {
         <button type="button" className="link-btn" onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}>
           {mode === 'login' ? 'New centre? Create an account' : 'Have an account? Log in'}
         </button>
+        <div className="demo-login-divider"><span>or explore first</span></div>
+        <button type="button" className="btn demo-btn" onClick={startDemo}>Explore the demo — no account needed</button>
+        <small className="demo-note">Sample data is stored only in this browser and can be reset anytime.</small>
       </form>
     </div>
   )

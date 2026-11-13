@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { demoDatabase, isDemoMode } from './demo.js'
 
 const configuredUrl = import.meta.env.VITE_SUPABASE_URL?.trim()
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
@@ -23,8 +24,10 @@ if (!configuredUrl || !anonKey) {
   }
 }
 
-// Supabase requires a valid URL even when configuration is missing. This unreachable
-// placeholder prevents production builds from silently sending auth requests to localhost.
 const clientUrl = configurationError ? 'https://supabase-not-configured.invalid' : supabaseUrl
+const realClient = createClient(clientUrl, anonKey || 'missing-supabase-anon-key')
 export const supabaseConfigError = configurationError
-export const supabase = createClient(clientUrl, anonKey || 'missing-supabase-anon-key')
+export const supabase = {
+  from: (table) => isDemoMode() ? demoDatabase.from(table) : realClient.from(table),
+  auth: realClient.auth,
+}

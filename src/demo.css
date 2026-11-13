@@ -1,0 +1,6 @@
+/* Demo mode */
+.demo-login-divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 13px; }
+.demo-login-divider::before, .demo-login-divider::after { height: 1px; flex: 1; background: var(--line); content: ''; }
+.demo-btn { width: 100%; color: #fff; background: var(--navy); }
+.demo-note { color: var(--muted); line-height: 1.5; text-align: center; }
+.demo-banner { margin: 0 0 12px; padding: 10px; border: 1px solid rgb(255 255 255 / 35%); border-radius: 10px; background: rgb(0 0 0 / 12%); font-size: 12px; line-height: 1.45; }
