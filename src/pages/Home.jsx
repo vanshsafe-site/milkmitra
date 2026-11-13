@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/auth.jsx'
-import { inr, today } from '../lib/util'
 import Logo from '../components/Logo.jsx'
 
 const features = [
@@ -20,25 +17,8 @@ const steps = [
 
 export default function Home() {
   const { session } = useAuth()
-  const [s, setS] = useState(null)
-
-  useEffect(() => {
-    if (!session) return setS(null)
-    ;(async () => {
-      const [f, c] = await Promise.all([
-        supabase.from('farmers').select('id', { count: 'exact', head: true }),
-        supabase.from('collections').select('litres,amount,status,collected_on'),
-      ])
-      const rows = c.data || []
-      setS({
-        farmers: f.count || 0,
-        litres: rows.filter((r) => r.collected_on === today()).reduce((a, r) => a + Number(r.litres), 0),
-        pending: rows.filter((r) => r.status === 'Pending').reduce((a, r) => a + Number(r.amount), 0),
-      })
-    })()
-  }, [session])
-
   const go = session ? '/dashboard' : '/login'
+
   return (
     <div className="home" id="home">
       <header className="topbar">
@@ -69,16 +49,6 @@ export default function Home() {
             </div>
           </div>
           <div className="hero-img" aria-hidden="true"><span>🐄</span><span>🥛</span></div>
-        </section>
-
-        <section className="live card" aria-label="Collection centre summary">
-          <small>Live from the collection centre</small>
-          <div className="live-row">
-            <div><b>{s ? s.farmers : '—'}</b><span>Farmers</span></div>
-            <div><b>{s ? `${s.litres} L` : '—'}</b><span>Today's milk</span></div>
-            <div><b>{s ? inr(s.pending) : '—'}</b><span>Pending payments</span></div>
-          </div>
-          {!session && <small>Log in to see your centre's numbers.</small>}
         </section>
 
         <section id="features" className="home-section features-section" aria-labelledby="features-title">
