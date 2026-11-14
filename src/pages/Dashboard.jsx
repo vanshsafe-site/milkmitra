@@ -1,26 +1,47 @@
 import { useEffect, useState } from 'react'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { supabase } from '../lib/supabase'
-import { useAuth } from '../lib/auth.jsx'
 import { PageHead, Badge, Empty } from '../components/Bits.jsx'
-import { inr, fmtDay, fmtDateTime } from '../lib/util'
+import { inr, fmtDateTime } from '../lib/util'
 
 export default function Dashboard() {
   const [farmers, setFarmers] = useState(0)
   const [rows, setRows] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    ;(async () => {
-      const from = new Date(Date.now() - 6 * 864e5).toISOString().slice(0, 10)
-      const [f, c] = await Promise.all([
-        supabase.from('farmers').select('id', { count: 'exact', head: true }),
-        supabase.from('collections').select('*, farmers(name)').order('collected_at', { ascending: false }),
-      ])
-      setFarmers(f.count || 0)
-      setRows((c.data || []).map((r) => ({ ...r, _recent: r.collected_on >= from })))
-    })()
+    let active = true
+    const load = async () => {
+      setLoading(true)
+      setError('')
+      try {
+        const farmerRequest = supabase.from('farmers').select('id', { count: 'exact', head: true })
+        let collectionRequest = supabase.from('collections').select('*, farmers(name)').order('collected_at', { ascending: false })
+        let [farmerResult, collectionResult] = await Promise.all([farmerRequest, collectionRequest])
+
+        // Older databases may not yet have the collected_at migration. Fall back to created_at.
+        if (collectionResult.error && /collected_at/i.test(collectionResult.error.message || '')) {
+          collectionResult = await supabase.from('collections').select('*, farmers(name)').order('created_at', { ascending: false })
+        }
+        if (farmerResult.error) throw farmerResult.error
+        if (collectionResult.error) throw collectionResult.error
+        if (!active) return
+
+        setFarmers(farmerResult.count || 0)
+        setRows(collectionResult.data || [])
+      } catch (loadError) {
+        if (active) setError(loadError instanceof Error ? loadError.message : 'Could not load dashboard data.')
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+    load()
+    return () => { active = false }
   }, [])
 
-  const todayRows = rows.filter((r) => r.collected_on === new Date().toISOString().slice(0, 10))
+  const today = new Date().toISOString().slice(0, 10)
+  const todayRows = rows.filter((r) => r.collected_on === today)
   const todayL = todayRows.reduce((a, r) => a + Number(r.litres), 0)
   const avgFat = todayRows.length ? (todayRows.reduce((a, r) => a + Number(r.fat), 0) / todayRows.length).toFixed(1) : '0.0'
   const pending = rows.filter((r) => r.status === 'Pending').reduce((a, r) => a + Number(r.amount), 0)
@@ -39,6 +60,8 @@ export default function Dashboard() {
   return (
     <>
       <PageHead title="Dashboard" />
+      {error && <p className="msg" role="alert">Dashboard data could not be loaded: {error}</p>}
+      {loading && <p className="muted" role="status">Loading dashboard…</p>}
       <div className="stats4">
         <div className="kpi"><span className="dot" style={{ background: '#2e7d3c' }}>👥</span><div><b>{farmers}</b><small>Total farmers</small></div></div>
         <div className="kpi"><span className="dot" style={{ background: '#3b82c4' }}>⚖</span><div><b>{todayL} L</b><small>Today's milk</small></div></div>
