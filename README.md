@@ -8,11 +8,10 @@ collection (litres, fat, SNF), the rate and amount are calculated automatically,
 ## Setup
 1. Create a project at https://supabase.com.
 2. Open **SQL Editor**, paste `supabase/schema.sql`, and run it.
-3. In **Authentication > Providers**, enable **Email** and **Phone**. Configure an SMS provider under **Project Settings > Auth > SMS Provider** before using phone OTP in production; Supabase may use its test OTP flow during development.
-4. (Dev convenience) **Authentication > Providers > Email**: turn off "Confirm email" to log in right after sign up.
-5. `cp .env.example .env` and fill in your Project URL and anon key (Project Settings > API).
-6. `npm install` then `npm run dev`
-7. Open the app, **Get Started > Create an account**, or choose **Mobile OTP** and enter a phone number in international format (for example `+919876543210`). Then Settings (optional rates), Farmers, Collection.
+3. (Dev convenience) **Authentication > Providers > Email**: turn off "Confirm email" to log in right after sign up.
+4. `cp .env.example .env` and fill in your Project URL and anon key (Project Settings > API).
+5. `npm install` then `npm run dev`
+6. Open the app, **Get Started > Create an account**, then Settings (optional rates), Farmers, Collection.
 
 ## Pages
 | Route | Purpose |
