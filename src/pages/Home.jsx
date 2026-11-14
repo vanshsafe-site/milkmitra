@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/auth.jsx'
 import Logo from '../components/Logo.jsx'
+import InstallAppButton from '../components/InstallAppButton.jsx'
 
 const features = [
   ['⚖', 'Measure', 'Record each milk collection digitally with accurate quantity tracking.'],
@@ -30,7 +31,10 @@ export default function Home() {
           <Link to={session ? '/farmers' : '/login'}>Farmers</Link>
           <Link to={session ? '/records' : '/login'}>Records</Link>
         </nav>
-        <Link className="btn green" to={go}>{session ? 'Open dashboard' : 'Get Started'}</Link>
+        <div className="topbar-actions">
+          <InstallAppButton />
+          <Link className="btn green" to={go}>{session ? 'Open dashboard' : 'Get Started'}</Link>
+        </div>
       </header>
 
       <main>
@@ -91,7 +95,10 @@ export default function Home() {
             <h2 id="cta-title">Bring your collection records together.</h2>
             <p>Manage farmers, daily collections, and payments from one dashboard.</p>
           </div>
-          <Link className="btn green" to={go}>{session ? 'Go to dashboard' : 'Get started'}</Link>
+          <div className="home-cta-actions">
+            <InstallAppButton />
+            <Link className="btn green" to={go}>{session ? 'Go to dashboard' : 'Get started'}</Link>
+          </div>
         </section>
       </main>
 

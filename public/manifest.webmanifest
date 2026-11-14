@@ -1,0 +1,24 @@
+{
+  "name": "MilkMitra",
+  "short_name": "MilkMitra",
+  "description": "Smart milk collection, fair payment for every farmer.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#edf7f0",
+  "theme_color": "#1b5b37",
+  "icons": [
+    {
+      "src": "/icons/milkmitra.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/milkmitra.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

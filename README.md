@@ -13,6 +13,11 @@ collection (litres, fat, SNF), the rate and amount are calculated automatically,
 5. `npm install` then `npm run dev`
 6. Open the app, **Get Started > Create an account**, then Settings (optional rates), Farmers, Collection.
 
+## Install the app
+MilkMitra is a Progressive Web App (PWA), so it can be installed from its website on supported phones and computers. Deploy it over HTTPS (Vercel provides HTTPS), open the site in a supported browser, and select **Download app**. When the browser does not provide an install prompt, use its menu to choose **Install app** or **Add to Home Screen**. On iPhone/iPad, open the site in Safari, tap **Share**, then **Add to Home Screen**.
+
+The installed app launches in its own window. The service worker caches the app shell and same-origin assets for faster repeat visits and basic offline loading; features that need Supabase still require an internet connection.
+
 ## Pages
 | Route | Purpose |
 |---|---|

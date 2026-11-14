@@ -1,0 +1,53 @@
+/* Installable web app */
+.topbar-actions,
+.home-cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.install-app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.btn.install-btn {
+  padding: 11px 18px;
+  color: #174b2f;
+  background: #f5c75d;
+  box-shadow: 0 10px 22px rgba(27, 91, 55, 0.18);
+  white-space: nowrap;
+}
+
+.install-help {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(320px, 85vw);
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid rgba(21, 54, 76, 0.12);
+  border-radius: 14px;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: var(--shadow);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.home-cta-actions .install-help {
+  right: auto;
+  left: 0;
+}
+
+@media (max-width: 760px) {
+  .topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
