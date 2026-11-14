@@ -1,0 +1,20 @@
+/* Language selector */
+.language-switch {
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.language-switch.light {
+  border-color: rgba(27, 91, 55, 0.2);
+  color: var(--dgreen);
+  background: rgba(255, 255, 255, 0.82);
+}
+.auth-language {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: -8px;
+}
