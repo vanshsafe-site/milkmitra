@@ -8,6 +8,7 @@ import Farmers from './pages/Farmers.jsx'
 import Collection from './pages/Collection.jsx'
 import Records from './pages/Records.jsx'
 import Payments from './pages/Payments.jsx'
+import Help from './pages/Help.jsx'
 import Settings from './pages/Settings.jsx'
 
 function Protected({ children }) {
@@ -26,6 +27,7 @@ export default function App() {
       <Route path="/collection" element={<Protected><Collection /></Protected>} />
       <Route path="/records" element={<Protected><Records /></Protected>} />
       <Route path="/payments" element={<Protected><Payments /></Protected>} />
+      <Route path="/help" element={<Protected><Help /></Protected>} />
       <Route path="/settings" element={<Protected><Settings /></Protected>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

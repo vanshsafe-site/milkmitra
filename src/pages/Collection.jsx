@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/auth.jsx'
 import { PageHead } from '../components/Bits.jsx'
-import { calcRate, calcAmount, inr, today } from '../lib/util'
+import { calcRate, calcAmount, inr, today, fmtDateTime } from '../lib/util'
 
 export default function Collection() {
   const { settings } = useAuth()
@@ -38,8 +38,17 @@ export default function Collection() {
   const save = async (e) => {
     e.preventDefault(); setMsg(''); setBusy(true)
     const { error } = await supabase.from('collections').insert({
-      farmer_id: f.farmer_id, collected_on: f.collected_on, shift: f.shift, milk_type: f.milk_type,
-      litres: Number(f.litres), fat: Number(f.fat), snf: Number(f.snf), rate, amount, status: f.status,
+      farmer_id: f.farmer_id,
+      collected_on: f.collected_on,
+      collected_at: new Date().toISOString(),
+      shift: f.shift,
+      milk_type: f.milk_type,
+      litres: Number(f.litres),
+      fat: Number(f.fat),
+      snf: Number(f.snf),
+      rate,
+      amount,
+      status: f.status,
     })
     setBusy(false)
     if (error) return setMsg(error.message)
@@ -95,6 +104,7 @@ export default function Collection() {
           <div className="card scale">
             <div className="scale-art">⚖️🥛</div>
             <small>Digital weighing scale</small>
+            <div className="small-meta">Recorded at: {fmtDateTime(new Date().toISOString())}</div>
           </div>
         </div>
       </div>

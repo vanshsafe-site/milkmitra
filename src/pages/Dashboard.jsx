@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../lib/auth.jsx'
 import { PageHead, Badge, Empty } from '../components/Bits.jsx'
-import { inr, today } from '../lib/util'
+import { inr, fmtDay, fmtDateTime } from '../lib/util'
 
 export default function Dashboard() {
   const [farmers, setFarmers] = useState(0)
@@ -13,14 +13,14 @@ export default function Dashboard() {
       const from = new Date(Date.now() - 6 * 864e5).toISOString().slice(0, 10)
       const [f, c] = await Promise.all([
         supabase.from('farmers').select('id', { count: 'exact', head: true }),
-        supabase.from('collections').select('*, farmers(name)').order('created_at', { ascending: false }),
+        supabase.from('collections').select('*, farmers(name)').order('collected_at', { ascending: false }),
       ])
       setFarmers(f.count || 0)
       setRows((c.data || []).map((r) => ({ ...r, _recent: r.collected_on >= from })))
     })()
   }, [])
 
-  const todayRows = rows.filter((r) => r.collected_on === today())
+  const todayRows = rows.filter((r) => r.collected_on === new Date().toISOString().slice(0, 10))
   const todayL = todayRows.reduce((a, r) => a + Number(r.litres), 0)
   const avgFat = todayRows.length ? (todayRows.reduce((a, r) => a + Number(r.fat), 0) / todayRows.length).toFixed(1) : '0.0'
   const pending = rows.filter((r) => r.status === 'Pending').reduce((a, r) => a + Number(r.amount), 0)
@@ -79,7 +79,9 @@ export default function Dashboard() {
             <tbody>
               {rows.slice(0, 5).map((r) => (
                 <tr key={r.id}>
-                  <td>{r.farmers?.name}</td><td>{r.shift}</td><td>{r.litres} L</td>
+                  <td>{r.farmers?.name}</td>
+                  <td>{fmtDateTime(r.collected_at || r.created_at)}<br /><small>{r.shift}</small></td>
+                  <td>{r.litres} L</td>
                   <td>{r.fat}%</td><td>{inr(r.amount)}</td><td><Badge status={r.status} /></td>
                 </tr>
               ))}

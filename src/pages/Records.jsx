@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { PageHead, Badge, Stat, Empty } from '../components/Bits.jsx'
-import { inr, fmtDay } from '../lib/util'
+import { inr, fmtDay, fmtDateTime } from '../lib/util'
 
 export default function Records() {
   const [rows, setRows] = useState([])
@@ -10,7 +10,7 @@ export default function Records() {
 
   const load = async () => {
     const { data } = await supabase.from('collections').select('*, farmers(name,farmer_code)')
-      .order('collected_on', { ascending: false }).order('created_at', { ascending: false })
+      .order('collected_at', { ascending: false }).order('created_at', { ascending: false })
     setRows(data || [])
   }
   useEffect(() => { load() }, [])
@@ -53,7 +53,9 @@ export default function Records() {
             <tbody>
               {shown.map((r) => (
                 <tr key={r.id}>
-                  <td>{fmtDay(r.collected_on)}</td><td>{r.shift}</td><td>{r.farmers?.name}</td><td>{r.milk_type}</td>
+                  <td>{fmtDay(r.collected_on)}</td>
+                  <td>{fmtDateTime(r.collected_at || r.created_at)}<br /><small>{r.shift}</small></td>
+                  <td>{r.farmers?.name}</td><td>{r.milk_type}</td>
                   <td>{r.litres}</td><td>{r.fat}%</td><td>{inr(r.rate)}</td><td><b>{inr(r.amount)}</b></td>
                   <td><button className="plain" title="Click to toggle" onClick={() => toggle(r)}><Badge status={r.status} /></button></td>
                 </tr>

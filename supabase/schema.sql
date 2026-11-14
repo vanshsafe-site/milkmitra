@@ -3,7 +3,15 @@ create table if not exists settings (
   owner_id uuid primary key default auth.uid() references auth.users on delete cascade,
   center_name text not null default 'MilkMitra Collection Centre',
   fat_rate numeric not null default 7,     -- Rate = Fat% x fat_rate + SNF% x snf_rate
-  snf_rate numeric not null default 1.6
+  snf_rate numeric not null default 1.6,
+  support_phone text default '+91 90000 00000',
+  support_email text default 'support@milkmitra.local',
+  grievance_email text default 'grievance@milkmitra.local',
+  payment_upi text default 'milkmitra@upi',
+  bank_name text default 'MilkMitra Cooperative Bank',
+  account_holder text default 'MilkMitra Collection Centre',
+  bank_account text default '000000000000',
+  ifsc_code text default 'MILB0000001'
 );
 
 create table if not exists farmers (
@@ -28,6 +36,7 @@ create table if not exists collections (
   owner_id uuid not null default auth.uid() references auth.users on delete cascade,
   farmer_id uuid not null references farmers on delete cascade,
   collected_on date not null default current_date,
+  collected_at timestamptz not null default now(),
   shift text not null check (shift in ('Morning','Evening')),
   milk_type text not null check (milk_type in ('Buffalo','Cow')),
   litres numeric not null check (litres > 0),

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../lib/auth.jsx'
 import { PageHead, Empty } from '../components/Bits.jsx'
-
-const blank = { name: '', father_name: '', mobile: '', village: '', district: '', milk_type: 'Buffalo', animals: 1, ifsc: '', bank_account: '' }
+import { fmtDateTime } from '../lib/util'
 
 export default function Farmers() {
-  const [form, setForm] = useState(blank)
+  const [form, setForm] = useState({
+    name: '', father_name: '', mobile: '', village: '', district: '', milk_type: 'Buffalo', animals: 1, ifsc: '', bank_account: ''
+  })
   const [list, setList] = useState([])
   const [sel, setSel] = useState(null)
   const [err, setErr] = useState('')
@@ -25,7 +26,9 @@ export default function Farmers() {
     const { data, error } = await supabase.from('farmers').insert({ ...form, animals: Number(form.animals) || 1 }).select().single()
     setBusy(false)
     if (error) return setErr(error.message)
-    setSel(data); setForm(blank); load()
+    setSel(data); setForm({
+      name: '', father_name: '', mobile: '', village: '', district: '', milk_type: 'Buffalo', animals: 1, ifsc: '', bank_account: ''
+    }); load()
   }
 
   const remove = async (f) => {
@@ -71,7 +74,7 @@ export default function Farmers() {
               <p>Father: {sel.father_name || '—'}<br />Mobile: {sel.mobile || '—'}<br />
                 Village: {sel.village || '—'}, {sel.district || '—'}<br />
                 Milk: {sel.milk_type} · {sel.animals} animals<br />
-                Registered: {new Date(sel.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                Registered: {fmtDateTime(sel.created_at)}</p>
               <div className="qr"><QRCodeSVG value={sel.farmer_code} size={150} fgColor="#1f5a2c" /><small>Unique QR code</small></div>
             </div>
           ) : <Empty>Register your first farmer to see their profile and QR code.</Empty>}
@@ -82,11 +85,12 @@ export default function Farmers() {
         <h3>All farmers ({list.length})</h3>
         {list.length === 0 ? <Empty>No farmers registered yet.</Empty> : (
           <table>
-            <thead><tr><th>ID</th><th>Name</th><th>Village</th><th>Milk</th><th>Mobile</th><th></th></tr></thead>
+            <thead><tr><th>ID</th><th>Name</th><th>Village</th><th>Milk</th><th>Mobile</th><th>Registered</th><th></th></tr></thead>
             <tbody>
               {list.map((f) => (
                 <tr key={f.id} className="clickable" onClick={() => setSel(f)}>
                   <td>{f.farmer_code}</td><td>{f.name}</td><td>{f.village}</td><td>{f.milk_type}</td><td>{f.mobile}</td>
+                  <td>{fmtDateTime(f.created_at)}</td>
                   <td><button className="link-btn danger" onClick={(e) => { e.stopPropagation(); remove(f) }}>Delete</button></td>
                 </tr>
               ))}
