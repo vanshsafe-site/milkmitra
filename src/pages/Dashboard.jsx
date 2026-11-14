@@ -3,6 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { supabase } from '../lib/supabase'
 import { PageHead, Badge, Empty } from '../components/Bits.jsx'
 import { inr, fmtDateTime } from '../lib/util'
+import './Dashboard.css'
 
 export default function Dashboard() {
   const [farmers, setFarmers] = useState(0)
@@ -94,22 +95,42 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card dashboard-recent">
         <h3>Recent collections</h3>
         {rows.length === 0 ? <Empty>No collections yet. Add one from the Collection page.</Empty> : (
-          <table>
-            <thead><tr><th>Farmer</th><th>Time</th><th>Litres</th><th>Fat</th><th>Amount</th><th>Status</th></tr></thead>
-            <tbody>
+          <>
+            <div className="dashboard-recent-table">
+              <table>
+                <thead><tr><th>Farmer</th><th>Time</th><th>Litres</th><th>Fat</th><th>Amount</th><th>Status</th></tr></thead>
+                <tbody>
+                  {rows.slice(0, 5).map((r) => (
+                    <tr key={r.id}>
+                      <td>{r.farmers?.name}</td>
+                      <td>{fmtDateTime(r.collected_at || r.created_at)}<br /><small>{r.shift}</small></td>
+                      <td>{r.litres} L</td>
+                      <td>{r.fat}%</td><td>{inr(r.amount)}</td><td><Badge status={r.status} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="dashboard-recent-mobile">
               {rows.slice(0, 5).map((r) => (
-                <tr key={r.id}>
-                  <td>{r.farmers?.name}</td>
-                  <td>{fmtDateTime(r.collected_at || r.created_at)}<br /><small>{r.shift}</small></td>
-                  <td>{r.litres} L</td>
-                  <td>{r.fat}%</td><td>{inr(r.amount)}</td><td><Badge status={r.status} /></td>
-                </tr>
+                <details className="dashboard-collection" key={r.id}>
+                  <summary>
+                    <span className="dashboard-collection-main"><strong>{r.farmers?.name || 'Farmer'}</strong><small>{fmtDateTime(r.collected_at || r.created_at)}</small></span>
+                    <span className="dashboard-collection-summary"><strong>{inr(r.amount)}</strong><Badge status={r.status} /></span>
+                  </summary>
+                  <div className="dashboard-collection-details">
+                    <p><b>Collection time</b><span>{r.shift || '—'}</span></p>
+                    <p><b>Milk</b><span>{r.litres} L</span></p>
+                    <p><b>Fat</b><span>{r.fat}%</span></p>
+                    <p><b>Payment status</b><Badge status={r.status} /></p>
+                  </div>
+                </details>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         )}
       </div>
     </>
