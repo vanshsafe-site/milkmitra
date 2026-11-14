@@ -10,11 +10,6 @@ const defaultSettings = {
   support_phone: '+91 90000 00000',
   support_email: 'support@milkmitra.local',
   grievance_email: 'grievance@milkmitra.local',
-  payment_upi: 'milkmitra@upi',
-  bank_name: 'MilkMitra Cooperative Bank',
-  account_holder: 'MilkMitra Collection Centre',
-  bank_account: '000000000000',
-  ifsc_code: 'MILB0000001',
 }
 
 export default function Settings() {
@@ -42,11 +37,6 @@ export default function Settings() {
       support_phone: s.support_phone,
       support_email: s.support_email,
       grievance_email: s.grievance_email,
-      payment_upi: s.payment_upi,
-      bank_name: s.bank_name,
-      account_holder: s.account_holder,
-      bank_account: s.bank_account,
-      ifsc_code: s.ifsc_code,
     })
     if (error) return setMsg(error.message)
     await loadSettings(); setMsg('Settings saved.')
@@ -67,14 +57,6 @@ export default function Settings() {
             <label>Support phone<input value={s.support_phone} onChange={set('support_phone')} /></label>
             <label>Support email<input type="email" value={s.support_email} onChange={set('support_email')} /></label>
             <label>Grievance email<input type="email" value={s.grievance_email} onChange={set('grievance_email')} /></label>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
-            <label>UPI ID<input value={s.payment_upi} onChange={set('payment_upi')} /></label>
-            <label>Bank name<input value={s.bank_name} onChange={set('bank_name')} /></label>
-            <label>Account holder<input value={s.account_holder} onChange={set('account_holder')} /></label>
-            <label>Bank account number<input value={s.bank_account} onChange={set('bank_account')} /></label>
-            <label>IFSC code<input value={s.ifsc_code} onChange={set('ifsc_code')} /></label>
           </div>
         </div>
 
