@@ -53,7 +53,7 @@
 @media (max-width: 900px) {
   .home .topbar {
     grid-template-columns: max-content minmax(0, 1fr);
-    gap: 8px 14px;
+    gap: 8px 12px;
   }
 
   .home .topbar > .home-brand {
@@ -61,11 +61,16 @@
     grid-row: 1;
   }
 
-  .home .topbar > .btn {
+  .home .topbar > .topbar-actions {
     grid-column: 2;
     grid-row: 1;
-    justify-self: end;
-    margin-left: 0;
+    display: flex;
+    width: auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
   }
 
   .home .topbar nav {
@@ -75,14 +80,47 @@
     width: 100%;
     padding-bottom: 2px;
   }
+
+  .home .topbar-actions > .btn,
+  .home .topbar-actions .btn.install-btn,
+  .home .topbar-actions .language-switch {
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .home .topbar-actions .install-app {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
 }
 
 @media (max-width: 420px) {
+  .home .topbar {
+    gap: 7px 8px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
   .home .topbar nav {
     gap: 18px;
   }
 
   .home .topbar nav a {
     font-size: 13px;
+  }
+
+  .home .topbar-actions {
+    gap: 4px;
+  }
+
+  .home .topbar-actions > .btn,
+  .home .topbar-actions .btn.install-btn,
+  .home .topbar-actions .language-switch {
+    padding: 7px 8px;
+    font-size: 11px;
   }
 }
