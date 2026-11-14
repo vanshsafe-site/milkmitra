@@ -1,0 +1,113 @@
+.farmers-card {
+  min-width: 0;
+}
+
+.farmers-table-wrap {
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.farmers-table-wrap table {
+  min-width: 700px;
+}
+
+.farmers-mobile-list {
+  display: none;
+}
+
+@media (max-width: 650px) {
+  .farmers-card {
+    padding: 18px 14px;
+  }
+
+  .farmers-table-wrap {
+    display: none;
+  }
+
+  .farmers-mobile-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .farmer-dropdown {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid rgba(21, 54, 76, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.75);
+  }
+
+  .farmer-dropdown summary {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .farmer-dropdown summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .farmer-dropdown summary::after {
+    flex: none;
+    color: var(--dgreen);
+    content: '▾';
+    font-size: 18px;
+  }
+
+  .farmer-dropdown[open] summary::after {
+    content: '▴';
+  }
+
+  .farmer-dropdown-title {
+    display: grid;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  .farmer-dropdown-title strong,
+  .farmer-dropdown-title small,
+  .farmer-dropdown-village {
+    overflow-wrap: anywhere;
+  }
+
+  .farmer-dropdown-title strong {
+    color: var(--navy);
+  }
+
+  .farmer-dropdown-title small {
+    color: var(--muted);
+  }
+
+  .farmer-dropdown-village {
+    min-width: 0;
+    max-width: 38%;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: right;
+  }
+
+  .farmer-dropdown-details {
+    padding: 0 12px 12px;
+    border-top: 1px solid rgba(21, 54, 76, 0.1);
+  }
+
+  .farmer-dropdown-details p {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+
+  .farmer-dropdown-details p span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: right;
+  }
+}

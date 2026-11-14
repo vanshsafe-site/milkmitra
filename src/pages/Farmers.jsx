@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/auth.jsx'
 import { PageHead, Empty } from '../components/Bits.jsx'
 import { fmtDateTime } from '../lib/util'
+import './Farmers.css'
 
 export default function Farmers() {
   const [form, setForm] = useState({
@@ -82,21 +83,41 @@ export default function Farmers() {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card farmers-card">
         <h3>All farmers ({list.length})</h3>
         {list.length === 0 ? <Empty>No farmers registered yet.</Empty> : (
-          <table>
-            <thead><tr><th>ID</th><th>Name</th><th>Village</th><th>Milk</th><th>Mobile</th><th>Registered</th><th></th></tr></thead>
-            <tbody>
+          <>
+            <div className="farmers-table-wrap">
+              <table>
+                <thead><tr><th>ID</th><th>Name</th><th>Village</th><th>Milk</th><th>Mobile</th><th>Registered</th><th></th></tr></thead>
+                <tbody>
+                  {list.map((f) => (
+                    <tr key={f.id} className="clickable" onClick={() => setSel(f)}>
+                      <td>{f.farmer_code}</td><td>{f.name}</td><td>{f.village}</td><td>{f.milk_type}</td><td>{f.mobile}</td>
+                      <td>{fmtDateTime(f.created_at)}</td>
+                      <td><button className="link-btn danger" onClick={(e) => { e.stopPropagation(); remove(f) }}>Delete</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="farmers-mobile-list">
               {list.map((f) => (
-                <tr key={f.id} className="clickable" onClick={() => setSel(f)}>
-                  <td>{f.farmer_code}</td><td>{f.name}</td><td>{f.village}</td><td>{f.milk_type}</td><td>{f.mobile}</td>
-                  <td>{fmtDateTime(f.created_at)}</td>
-                  <td><button className="link-btn danger" onClick={(e) => { e.stopPropagation(); remove(f) }}>Delete</button></td>
-                </tr>
+                <details className="farmer-dropdown" key={f.id}>
+                  <summary onClick={() => setSel(f)}>
+                    <span className="farmer-dropdown-title"><strong>{f.name}</strong><small>{f.farmer_code}</small></span>
+                    <span className="farmer-dropdown-village">{f.village || 'Village not set'}</span>
+                  </summary>
+                  <div className="farmer-dropdown-details">
+                    <p><b>Milk type</b><span>{f.milk_type || '—'}</span></p>
+                    <p><b>Mobile</b><span>{f.mobile || '—'}</span></p>
+                    <p><b>Registered</b><span>{fmtDateTime(f.created_at)}</span></p>
+                    <button className="link-btn danger" onClick={() => remove(f)}>Delete farmer</button>
+                  </div>
+                </details>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         )}
       </div>
     </>
