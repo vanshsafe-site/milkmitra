@@ -1,0 +1,88 @@
+/* Landing-page navigation: keep links on one horizontal track. */
+.home .topbar {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: clamp(12px, 2vw, 28px);
+}
+
+.home .topbar nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 1.8vw, 26px);
+  width: auto;
+  min-width: 0;
+  order: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.home .topbar nav::-webkit-scrollbar {
+  display: none;
+}
+
+.home .topbar nav a {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 10px 0;
+}
+
+.home .topbar nav a::after {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--green);
+  content: '';
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.home .topbar nav a:hover::after,
+.home .topbar nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@media (max-width: 900px) {
+  .home .topbar {
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 8px 14px;
+  }
+
+  .home .topbar > .home-brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .home .topbar > .btn {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    margin-left: 0;
+  }
+
+  .home .topbar nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+    width: 100%;
+    padding-bottom: 2px;
+  }
+}
+
+@media (max-width: 420px) {
+  .home .topbar nav {
+    gap: 18px;
+  }
+
+  .home .topbar nav a {
+    font-size: 13px;
+  }
+}
