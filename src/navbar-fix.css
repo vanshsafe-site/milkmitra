@@ -1,0 +1,30 @@
+/* Keep navigation links in a horizontal row; the sidebar remains a vertical menu. */
+.home .topbar nav {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.home .topbar nav::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 900px) {
+  .home .topbar nav {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
