@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /farmers
+Disallow: /collection
+Disallow: /records
+Disallow: /payments
+Disallow: /settings
+Disallow: /login
+
+Sitemap: https://milkmitra.vercel.app/sitemap.xml
