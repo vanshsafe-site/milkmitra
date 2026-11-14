@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/auth.jsx'
 import { PageHead, Empty } from '../components/Bits.jsx'
