@@ -9,6 +9,7 @@ const links = [
   ['/collection', 'Collection', '📋'],
   ['/records', 'Records', '▤'],
   ['/payments', 'Payments', '₹'],
+  ['/device', 'ESP32 Device', '🥛'],
   ['/help', 'Help', '❔'],
   ['/settings', 'Settings', '⚙'],
 ]

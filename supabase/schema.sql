@@ -1,4 +1,4 @@
--- MilkMitra schema. Run in Supabase Dashboard > SQL Editor.
+# MilkMitra schema. Run in Supabase Dashboard > SQL Editor.
 create table if not exists settings (
   owner_id uuid primary key default auth.uid() references auth.users on delete cascade,
   center_name text not null default 'MilkMitra Collection Centre',

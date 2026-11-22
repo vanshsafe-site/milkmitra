@@ -10,6 +10,7 @@ import Records from './pages/Records.jsx'
 import Payments from './pages/Payments.jsx'
 import Help from './pages/Help.jsx'
 import Settings from './pages/Settings.jsx'
+import Device from './pages/Device.jsx'
 
 function Protected({ children }) {
   const { session } = useAuth()
@@ -29,6 +30,7 @@ export default function App() {
       <Route path="/payments" element={<Protected><Payments /></Protected>} />
       <Route path="/help" element={<Protected><Help /></Protected>} />
       <Route path="/settings" element={<Protected><Settings /></Protected>} />
+      <Route path="/device" element={<Protected><Device /></Protected>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
