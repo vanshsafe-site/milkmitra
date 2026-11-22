@@ -1,6 +1,6 @@
 /*
  * MilkMitra ESP32 milk-reading demo and BLE Wi-Fi setup.
- * Board: classic ESP32 Dev Module / WROOM, Arduino-ESP32 core 3.x.
+ * Board: classic ESP32 Dev Module / WROOM, Arduino-ESP32 core 3.4.0 or newer.
  * OLED: SH1106 128x64 I2C @ 0x3C, SDA=21, SCL=22.
  * Buttons: DOWN=GPIO4 and UP=GPIO27, each connected between GPIO and GND.
  *
@@ -24,11 +24,15 @@
 #include <U8g2lib.h>
 #include <Preferences.h>
 #include <atomic>
-#include <esp_crt_bundle.h>
+#include <time.h>
+#include <esp_arduino_version.h>
 #include <esp_wifi.h>
 #include <network_provisioning/manager.h>
 #include <network_provisioning/scheme_ble.h>
 
+#if ESP_ARDUINO_VERSION < ESP_ARDUINO_VERSION_VAL(3, 4, 0)
+#error "Use Arduino-ESP32 core 3.4.0 or newer for built-in HTTPS CA bundle support."
+#endif
 #if !CONFIG_IDF_TARGET_ESP32
 #error "This sketch targets the classic ESP32 (WROOM/Dev Module)."
 #endif
@@ -137,8 +141,22 @@ void uploadReading() {
   if (strstr(API_KEY, "PASTE_") != nullptr || strlen(API_KEY) < 20) {
     snprintf(statusLine, sizeof(statusLine), "Set API key in sketch"); return;
   }
+
+  // Certificate validation checks certificate dates, so synchronize the clock first.
+  configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+  time_t now = time(nullptr);
+  uint32_t clockWaitStarted = millis();
+  while (now < 8 * 3600 * 2 && millis() - clockWaitStarted < 15000) {
+    delay(250);
+    now = time(nullptr);
+  }
+  if (now < 8 * 3600 * 2) {
+    snprintf(statusLine, sizeof(statusLine), "Clock sync failed");
+    return;
+  }
+
   WiFiClientSecure tls;
-  tls.setCACertBundle(x509_crt_bundle); // Validate HTTPS using the ESP32 certificate bundle.
+  tls.useBuiltinCACertBundle(); // Validate HTTPS with the ESP32 built-in Mozilla CA bundle.
   HTTPClient http;
   http.setTimeout(12000);
   if (!http.begin(tls, API_URL)) { snprintf(statusLine, sizeof(statusLine), "HTTPS setup failed"); return; }
