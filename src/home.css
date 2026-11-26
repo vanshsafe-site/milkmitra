@@ -1,8 +1,22 @@
 .home .hero {
   grid-template-columns: minmax(0, 1fr);
   min-height: auto;
+  place-items: center;
+  text-align: center;
 }
 
 .home .hero-text {
   max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.home .hero p,
+.home .ticks {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.home .hero-btns {
+  justify-content: center;
 }
