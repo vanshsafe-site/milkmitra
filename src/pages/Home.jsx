@@ -3,6 +3,7 @@ import { useAuth } from '../lib/auth.jsx'
 import { useLanguage } from '../lib/language.jsx'
 import Logo from '../components/Logo.jsx'
 import InstallAppButton from '../components/InstallAppButton.jsx'
+import '../home.css'
 
 export default function Home() {
   const { session } = useAuth()
@@ -55,7 +56,6 @@ export default function Home() {
               <a className="btn outline" href="#how-it-works">{t('How it works')}</a>
             </div>
           </div>
-          <div className="hero-img" aria-hidden="true"><span>🐄</span><span>🥛</span></div>
         </section>
 
         <section id="features" className="home-section features-section" aria-labelledby="features-title">
